@@ -28,6 +28,108 @@ body {
     margin: 0 auto;
 }
 
+
+.content-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    align-items: flex-start;
+}
+
+/* Add space from header so sidebar/main are not glued to it */
+.content-wrapper {
+    margin-top: 20px;
+}
+
+.sidebar {
+    display: none; /* hidden by default, shown when open */
+    width: 100%;
+    flex: none;
+    background: var(--blanc);
+    border-radius: 14px;
+    padding: 18px;
+    box-shadow: var(--ombra);
+    border: 1px solid rgba(15,45,74,0.06);
+    height: fit-content;
+}
+
+/* When `.open` is added, show the sidebar as a block that pushes content down */
+.sidebar.open {
+    display: block;
+    position: static;
+    width: 100%;
+    max-width: none;
+    height: auto;
+    margin-bottom: 14px;
+    padding-left: 14px;
+    padding-right: 14px;
+    transition: all 180ms ease;
+}
+
+.sidebar ul {
+    list-style: none;
+}
+
+.sidebar li + li {
+    margin-top: 10px;
+}
+
+.sidebar a {
+    color: var(--blau-fosc);
+    text-decoration: none;
+    font-weight: 700;
+    display: block;
+    padding: 8px 10px;
+    border-radius: 8px;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+
+.sidebar a:hover,
+.sidebar a:focus {
+    background: linear-gradient(90deg, rgba(0,168,120,0.08), rgba(23,63,102,0.06));
+    color: var(--verd-principal);
+    outline: none;
+}
+
+/* Toggle button inside sidebar */
+.sidebar-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    border: 1px solid rgba(15,45,74,0.06);
+    background: transparent;
+    color: var(--blau-fosc);
+    font-size: 1rem;
+    cursor: pointer;
+    margin-bottom: 12px;
+}
+
+/* Collapsed sidebar */
+.sidebar.collapsed {
+    width: 64px;
+    flex: 0 0 64px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sidebar.collapsed ul {
+    padding-left: 0;
+}
+
+.sidebar.collapsed a {
+    text-indent: -9999px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+.sidebar.collapsed .sidebar-toggle {
+    transform: rotate(90deg);
+}
+
 .capcalera {
     background: linear-gradient(135deg, var(--blau-fosc), var(--blau-mitja));
     color: var(--blanc);
@@ -41,6 +143,11 @@ body {
     gap: 32px;
 }
 
+/* allow absolutely positioned children (hamburger) to align inside header) */
+.capcalera-contingut {
+    position: relative;
+}
+
 .logo {
     width: 150px;
     height: auto;
@@ -48,6 +155,26 @@ body {
     padding: 16px;
     border-radius: 18px;
     box-shadow: var(--ombra);
+}
+
+.mobile-sidebar-toggle {
+    display: inline-flex;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    z-index: 1400;
+    background: var(--blanc);
+    border-radius: 10px;
+    border: 1px solid rgba(15,45,74,0.06);
+    box-shadow: var(--ombra);
+    color: var(--blau-fosc);
+    font-size: 1.1rem;
+    cursor: pointer;
 }
 
 .etiqueta {
@@ -132,6 +259,8 @@ h1 {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+
+/* Menu behavior is consistent across all screen sizes: hidden by default, shown when `.open` is toggled */
 
 @media (max-width: 650px) {
     .capcalera-contingut {

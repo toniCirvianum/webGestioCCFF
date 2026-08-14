@@ -12,6 +12,7 @@
     <header class="capcalera">
         <div class="contenidor capcalera-contingut">
             <img src="Cicles_sota.png" alt="Logo Cicles Formatius" class="logo">
+            <button type="button" class="mobile-sidebar-toggle" aria-label="Obre menú" aria-expanded="false">☰</button>
             <div>
                 <p class="etiqueta">Institut Cirvianum</p>
                 <h1>Gestió cicles formatius</h1>
@@ -22,9 +23,20 @@
         </div>
     </header>
 
-    <main class="contenidor">
+    <div class="content-wrapper contenidor">
 
-        <section class="bloc">
+        <nav class="sidebar" aria-label="Menú seccions">
+            <button class="sidebar-toggle" aria-label="Col·lapsa menú" aria-expanded="true">☰</button>
+            <ul>
+                <li><a href="#gestio" title="Gestió acadèmica">Gestió acadèmica</a></li>
+                <li><a href="#seguiment" title="Seguiment de l'alumnat">Seguiment de l'alumnat</a></li>
+                <li><a href="#organitzacio" title="Organització del cicle">Organització del cicle</a></li>
+            </ul>
+        </nav>
+
+        <main>
+
+        <section id="gestio" class="bloc">
             <h2>Gestió acadèmica</h2>
             <div class="graella-cards">
                 <article class="card">
@@ -103,7 +115,7 @@
             </div>
         </section>
 
-        <section class="bloc">
+        <section id="seguiment" class="bloc">
             <h2>Seguiment de l'alumnat</h2>
             <div class="graella-cards">
                 <article class="card">
@@ -140,7 +152,7 @@
             </div>
         </section>
 
-        <section class="bloc">
+        <section id="organitzacio" class="bloc">
             <h2>Organització del cicle</h2>
             <div class="graella-cards">
                 <article class="card">
@@ -177,7 +189,61 @@
             </div>
         </section>
 
-    </main>
+        </main>
+
+    </div>
+
+    <script>
+        (function(){
+            const sidebar = document.querySelector('.sidebar');
+            const btn = document.querySelector('.sidebar-toggle');
+            const mobileBtn = document.querySelector('.mobile-sidebar-toggle');
+            const header = document.querySelector('.capcalera');
+            if(!sidebar) return;
+
+            // If sidebar-toggle exists, wire its collapse behaviour and restore saved state
+            if(btn){
+                const saved = localStorage.getItem('sidebarCollapsed') === 'true';
+                if(saved) {
+                    sidebar.classList.add('collapsed');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+
+                btn.addEventListener('click', function(){
+                    const collapsed = sidebar.classList.toggle('collapsed');
+                    btn.setAttribute('aria-expanded', String(!collapsed));
+                    localStorage.setItem('sidebarCollapsed', collapsed ? 'true' : 'false');
+                });
+            }
+
+            // Toggle: opens sidebar as a block that pushes content down (applies to all sizes)
+            function toggleSidebar(){
+                try{
+                    const open = sidebar.classList.toggle('open');
+                    if(mobileBtn) mobileBtn.setAttribute('aria-expanded', String(open));
+                    console.log('toggleSidebar ->', open);
+                    return open;
+                }catch(err){
+                    console.error('toggleSidebar error', err);
+                }
+            }
+
+            if(mobileBtn){
+                mobileBtn.addEventListener('click', toggleSidebar);
+            }
+
+            // Close sidebar on Escape key when open (mobile)
+            document.addEventListener('keydown', function(e){
+                if(e.key === 'Escape' && sidebar.classList.contains('open')){
+                    sidebar.classList.remove('open');
+                    sidebar.classList.remove('visible');
+                    if(mobileBtn) mobileBtn.setAttribute('aria-expanded', 'false');
+                    sidebar.style.top = '';
+                    sidebar.style.height = '';
+                }
+            });
+        })();
+    </script>
 
 </body>
 </html>
